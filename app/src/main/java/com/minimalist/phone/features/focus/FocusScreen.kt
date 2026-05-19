@@ -26,18 +26,29 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
 @Composable
-fun FocusScreen(modifier: Modifier = Modifier) {
+fun FocusScreen(viewModel: FocusViewModel, modifier: Modifier = Modifier) {
     val totalTime = 25 * 60
     var timeLeft by remember { mutableStateOf(totalTime) } // 25 minutes in seconds
     var isRunning by remember { mutableStateOf(false) }
+    var sessionStartTime by remember { mutableStateOf(0L) }
 
     LaunchedEffect(isRunning) {
         if (isRunning) {
+            if (sessionStartTime == 0L) {
+                sessionStartTime = System.currentTimeMillis()
+            }
             while (timeLeft > 0) {
                 delay(1000L)
                 timeLeft--
             }
             isRunning = false
+
+            // Session completed natively
+            if (timeLeft == 0) {
+                viewModel.saveSession(sessionStartTime, totalTime.toLong(), true)
+                sessionStartTime = 0L
+                timeLeft = totalTime // Reset for next session
+            }
         }
     }
 
@@ -65,9 +76,9 @@ fun FocusScreen(modifier: Modifier = Modifier) {
 
             Box(contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
-                    progress = progress,
+                    progress = { progress },
                     modifier = Modifier.size(240.dp),
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = if (isRunning) com.minimalist.phone.core.theme.NothingRed else MaterialTheme.colorScheme.onBackground,
                     trackColor = MaterialTheme.colorScheme.surfaceVariant,
                     strokeWidth = 4.dp
                 )
@@ -81,13 +92,24 @@ fun FocusScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(64.dp))
 
             Button(
-                onClick = { isRunning = !isRunning },
+                onClick = {
+                    if (isRunning) {
+                        // User paused/cancelled the session
+                        val durationInSeconds = totalTime - timeLeft
+                        viewModel.saveSession(sessionStartTime, durationInSeconds.toLong(), false)
+
+                        // Reset session
+                        sessionStartTime = 0L
+                        timeLeft = totalTime
+                    }
+                    isRunning = !isRunning
+                },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isRunning) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onBackground,
+                    containerColor = if (isRunning) com.minimalist.phone.core.theme.NothingRed else MaterialTheme.colorScheme.onBackground,
                     contentColor = MaterialTheme.colorScheme.background
                 )
             ) {
-                Text(if (isRunning) "Pause" else "Start Session")
+                Text(if (isRunning) "Stop" else "Start Session")
             }
         }
     }

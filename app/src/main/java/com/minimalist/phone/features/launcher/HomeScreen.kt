@@ -76,14 +76,14 @@ fun HomeScreen(
             Text(
                 text = currentTime,
                 style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground, // Will map to NothingBlack/NothingWhite
                 modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 textAlign = TextAlign.Start
             )
             Text(
                 text = currentDate,
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.secondary,
+                color = com.minimalist.phone.core.theme.NothingRed, // Use the Nothing Red for the date accent
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start
             )
