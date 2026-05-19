@@ -9,17 +9,17 @@ import androidx.compose.ui.unit.sp
 val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Normal,
-        fontSize = 57.sp,
-        lineHeight = 64.sp,
-        letterSpacing = 0.sp
+        fontWeight = FontWeight.Light,
+        fontSize = 64.sp,
+        lineHeight = 72.sp,
+        letterSpacing = (-1.5).sp
     ),
     headlineLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,
-        fontWeight = FontWeight.Normal,
-        fontSize = 32.sp,
-        lineHeight = 40.sp,
-        letterSpacing = 0.sp
+        fontWeight = FontWeight.Light,
+        fontSize = 36.sp,
+        lineHeight = 44.sp,
+        letterSpacing = (-0.5).sp
     ),
     titleLarge = TextStyle(
         fontFamily = FontFamily.SansSerif,

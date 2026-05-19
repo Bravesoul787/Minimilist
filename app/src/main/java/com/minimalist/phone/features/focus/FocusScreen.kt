@@ -6,7 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +27,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun FocusScreen(modifier: Modifier = Modifier) {
-    var timeLeft by remember { mutableStateOf(25 * 60) } // 25 minutes in seconds
+    val totalTime = 25 * 60
+    var timeLeft by remember { mutableStateOf(totalTime) } // 25 minutes in seconds
     var isRunning by remember { mutableStateOf(false) }
 
     LaunchedEffect(isRunning) {
@@ -40,6 +44,7 @@ fun FocusScreen(modifier: Modifier = Modifier) {
     val minutes = timeLeft / 60
     val seconds = timeLeft % 60
     val timeString = String.format("%02d:%02d", minutes, seconds)
+    val progress = timeLeft.toFloat() / totalTime.toFloat()
 
     Surface(
         modifier = modifier.fillMaxSize(),
@@ -58,13 +63,22 @@ fun FocusScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = timeString,
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Box(contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    progress = progress,
+                    modifier = Modifier.size(240.dp),
+                    color = MaterialTheme.colorScheme.onBackground,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                    strokeWidth = 4.dp
+                )
+                Text(
+                    text = timeString,
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
 
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(64.dp))
 
             Button(
                 onClick = { isRunning = !isRunning },

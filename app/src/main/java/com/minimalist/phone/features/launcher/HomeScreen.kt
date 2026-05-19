@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.compose.material3.TextButton
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.ui.Alignment
@@ -67,35 +68,27 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp)
+                .padding(horizontal = 24.dp, vertical = 32.dp)
         ) {
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Clock & Date
             Text(
                 text = currentTime,
                 style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.onBackground,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
                 textAlign = TextAlign.Start
             )
             Text(
                 text = currentDate,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.secondary,
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Start
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                TextButton(onClick = onNavigateToFocus) {
-                    Text("Focus Mode", color = MaterialTheme.colorScheme.secondary)
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             // Search
             SearchField(
@@ -106,13 +99,24 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // App List
-            MinimalAppList(
-                apps = apps,
-                onAppClick = { app ->
-                    launchApp(context, app)
+            // App List - giving it a weight so Focus Mode button stays at the bottom
+            Box(modifier = Modifier.weight(1f)) {
+                MinimalAppList(
+                    apps = apps,
+                    onAppClick = { app ->
+                        launchApp(context, app)
+                    }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Focus Mode Button
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                TextButton(onClick = onNavigateToFocus) {
+                    Text("Enter Focus Mode", color = MaterialTheme.colorScheme.secondary)
                 }
-            )
+            }
         }
     }
 }

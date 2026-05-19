@@ -10,6 +10,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ fun SearchField(
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp),
+        shape = RoundedCornerShape(24.dp),
         placeholder = {
             Text(
                 text = placeholderText,
@@ -39,11 +41,12 @@ fun SearchField(
             color = MaterialTheme.colorScheme.onBackground
         ),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            disabledContainerColor = Color.Transparent,
-            focusedIndicatorColor = MaterialTheme.colorScheme.onBackground,
-            unfocusedIndicatorColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent,
             cursorColor = MaterialTheme.colorScheme.onBackground
         ),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
