@@ -31,6 +31,14 @@
             android:launchMode="singleInstance" />
 
         <activity
+            android:name=".features.lockscreen.LockScreenActivity"
+            android:theme="@style/Theme.MinimalistPhone"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MinimalistPhone"
