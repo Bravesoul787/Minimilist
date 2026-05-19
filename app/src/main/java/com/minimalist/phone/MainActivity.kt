@@ -17,11 +17,16 @@ import com.minimalist.phone.features.focus.FocusScreen
 import com.minimalist.phone.features.focus.FocusViewModel
 import com.minimalist.phone.features.launcher.HomeScreen
 import com.minimalist.phone.features.launcher.LauncherViewModel
+import com.minimalist.phone.features.settings.SettingsRepository
+import com.minimalist.phone.features.settings.SettingsScreen
+import com.minimalist.phone.features.settings.SettingsViewModel
 import androidx.core.view.WindowCompat
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.minimalist.phone.features.lockscreen.LockScreenActivity
 
 class MainActivity : ComponentActivity() {
@@ -48,9 +53,20 @@ class MainActivity : ComponentActivity() {
         val appDatabase = AppDatabase.getDatabase(applicationContext)
         val appRepository = AppRepository(applicationContext, appDatabase.appDao())
         val focusRepository = FocusRepository(appDatabase.focusSessionDao())
+        val settingsRepository = SettingsRepository(appDatabase.settingsDao())
 
         setContent {
-            MinimalistPhoneTheme {
+            val settingsViewModel: SettingsViewModel = viewModel(
+                factory = object : ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
+                    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                        return SettingsViewModel(settingsRepository) as T
+                    }
+                }
+            )
+            val currentTheme by settingsViewModel.currentTheme.collectAsState()
+
+            MinimalistPhoneTheme(themeStyle = currentTheme) {
                 val navController = rememberNavController()
                 val launcherViewModel: LauncherViewModel = viewModel(
                     factory = object : ViewModelProvider.Factory {
@@ -73,11 +89,18 @@ class MainActivity : ComponentActivity() {
                     composable("home") {
                         HomeScreen(
                             viewModel = launcherViewModel,
-                            onNavigateToFocus = { navController.navigate("focus") }
+                            onNavigateToFocus = { navController.navigate("focus") },
+                            onNavigateToSettings = { navController.navigate("settings") }
                         )
                     }
                     composable("focus") {
                         FocusScreen(viewModel = focusViewModel)
+                    }
+                    composable("settings") {
+                        SettingsScreen(
+                            viewModel = settingsViewModel,
+                            onNavigateBack = { navController.popBackStack() }
+                        )
                     }
                 }
             }
