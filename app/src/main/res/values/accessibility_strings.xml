@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_service_description">Minimalist Phone Detox Service monitors app usage to provide intentionality prompts before opening distracting apps.</string>
+</resources>
